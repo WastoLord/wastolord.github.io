@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolutec — Suporte Técnico Remoto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0d1b2a; --blue: #1b4f8a; --cyan: #2eb8c7;
+      --white: #ffffff; --gray: #8a9bb0; --green: #1db87a;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Syne', sans-serif; background: var(--navy); color: var(--white); overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background: rgba(13,27,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,184,199,0.15); }
+    .nav-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1.1rem; color: var(--cyan); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); }
+    /* HAMBURGER */
+    .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; border: none; background: none; z-index: 300; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--cyan); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    /* DRAWER */
+    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: #0a1520; border-left: 1px solid rgba(46,184,199,0.2); z-index: 200; transition: right 0.3s; overflow-y: auto; overflow-x: hidden; padding: 5rem 1.5rem 2rem; display: block; }
+    .drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; }
+    .drawer-overlay.open { display: block; }
+    .drawer-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; padding: 1rem 0 0.5rem; border-top: 1px solid rgba(46,184,199,0.1); margin-top: 0.5rem; }
+    .drawer-label:first-child { border-top: none; margin-top: 0; }
+    .drawer a { color: var(--gray); text-decoration: none; font-size: 0.95rem; font-weight: 600; padding: 0.6rem 0; transition: color 0.2s; display: block; }
+    .drawer a:hover { color: var(--white); }
+    /* TOOL ACCORDION */
+    .tool-item { border: 1px solid rgba(46,184,199,0.1); border-radius: 6px; margin-top: 0.4rem; overflow: hidden; }
+    .tool-header { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; cursor: pointer; background: rgba(27,79,138,0.1); transition: background 0.2s; font-size: 0.85rem; font-weight: 600; color: var(--white); border: none; width: 100%; text-align: left; }
+    .tool-header:hover { background: rgba(27,79,138,0.25); }
+    .tool-arrow { color: var(--cyan); font-size: 0.7rem; transition: transform 0.3s; }
+    .tool-header.open .tool-arrow { transform: rotate(180deg); }
+    .tool-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(13,27,42,0.9); }
+    .tool-body.open { max-height: 2000px; }
+    .tool-body-inner { padding: 1rem; }
+    .tool-desc { font-size: 0.78rem; color: var(--gray); line-height: 1.5; margin-bottom: 0.8rem; }
+    .tool-result { font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--cyan); margin-top: 0.8rem; word-break: break-all; min-height: 1rem; }
+    .tool-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(46,184,199,0.2); border-radius: 4px; padding: 0.5rem 0.8rem; color: var(--white); font-family: 'Space Mono', monospace; font-size: 0.78rem; outline: none; margin-bottom: 0.5rem; }
+    .tool-input:focus { border-color: var(--cyan); }
+    .tool-btn { background: var(--cyan); color: var(--navy); border: none; padding: 0.4rem 1rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .tool-btn:hover { background: #25d4e5; }
+    .copy-btn { background: none; border: 1px solid rgba(46,184,199,0.3); color: var(--cyan); padding: 0.2rem 0.5rem; border-radius: 3px; font-family: 'Space Mono', monospace; font-size: 0.65rem; cursor: pointer; margin-left: 0.4rem; }
+    .strength-bar { height: 6px; border-radius: 3px; margin-top: 0.5rem; transition: width 0.3s, background 0.3s; width: 0; }
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; position: relative; overflow: hidden; width: 100%; }
+    .hero-badge { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s; }
+    .hero h1 { font-size: clamp(2rem,8vw,5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s; }
+    .hero h1 span { color: var(--cyan); }
+    .hero p { font-size: 1.15rem; color: var(--gray); line-height: 1.7; max-width: 560px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s; }
+    .hero-buttons { display: flex; gap: 0.8rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease forwards 0.8s; align-items: flex-start; }
+    .hero-grid { position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 400px; height: 400px; opacity: 0.06; background-image: linear-gradient(var(--cyan) 1px, transparent 1px), linear-gradient(90deg, var(--cyan) 1px, transparent 1px); background-size: 40px 40px; border-radius: 50%; animation: pulse 4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:0.06; transform:translateY(-50%) scale(1); } 50% { opacity:0.1; transform:translateY(-50%) scale(1.05); } }
+    /* BUTTONS */
+    .btn { padding: 0.85rem 2rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; display: inline-block; width: auto; }
+    .btn-primary { background: var(--cyan); color: var(--navy); }
+    .btn-primary:hover { background: #25d4e5; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,184,199,0.3); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+    /* STATS */
+    .stats { background: rgba(27,79,138,0.15); border-top: 1px solid rgba(46,184,199,0.1); border-bottom: 1px solid rgba(46,184,199,0.1); padding: 2rem; }
+    .stats-inner { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-number { font-family: 'Space Mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--cyan); }
+    .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
+    /* SECTION */
+    section { max-width: 900px; margin: 0 auto; padding: 5rem 2rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+    .section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.1; }
+    .section-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
+    /* SERVICES */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1px; background: rgba(46,184,199,0.1); border: 1px solid rgba(46,184,199,0.1); border-radius: 8px; overflow: hidden; }
+    .service-card { background: rgba(13,27,42,0.95); padding: 2rem; transition: background 0.2s; cursor: pointer; }
+    .service-card:hover { background: rgba(27,79,138,0.3); }
+    .service-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .service-name { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .service-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; margin-bottom: 1.2rem; }
+    .service-footer { display: flex; justify-content: space-between; align-items: center; }
+    .service-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+    .service-time { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gray); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px; }
+    /* STEPS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 2rem; }
+    .step { padding-left: 1rem; border-left: 2px solid rgba(46,184,199,0.3); }
+    .step-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.8rem; }
+    .step-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .step-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+    /* PAYMENT */
+    .payment-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.5rem; }
+    .payment-card { background: rgba(27,79,138,0.1); border: 1px solid rgba(46,184,199,0.15); border-radius: 8px; padding: 1.8rem; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+    .payment-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .payment-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+    .payment-name { font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem; }
+    .payment-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.5; }
+    /* CONTACT */
+    .contact-box { background: rgba(27,79,138,0.15); border: 1px solid rgba(46,184,199,0.2); border-radius: 8px; padding: 3rem; text-align: center; }
+    .contact-box h2 { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+    .contact-box p { color: var(--gray); margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; }
+    .contact-options { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--navy); border: 1px solid rgba(46,184,199,0.3); border-radius: 12px; padding: 2.5rem; max-width: 480px; width: 100%; position: relative; }
+    .modal h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .modal-price { font-family: 'Space Mono', monospace; color: var(--green); font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .modal p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+    .modal-close:hover { color: var(--white); }
+    .pix-info { background: rgba(46,184,199,0.08); border: 1px solid rgba(46,184,199,0.2); border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; }
+    .pix-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.4rem; }
+    .pix-key { font-family: 'Space Mono', monospace; font-size: 0.9rem; color: var(--white); word-break: break-all; }
+    .whatsapp-btn { display: block; background: #25D366; color: white; text-align: center; padding: 0.85rem; border-radius: 4px; text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; transition: background 0.2s, transform 0.2s; }
+    .whatsapp-btn:hover { background: #20ba58; transform: translateY(-2px); }
+    footer { border-top: 1px solid rgba(46,184,199,0.1); padding: 2rem; text-align: center; color: var(--gray); font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @media (max-width: 600px) { nav { padding: 1rem; } .nav-links { display: none; } .hero { padding: 5rem 1.5rem 3rem; min-height: auto; } .hero-grid { display: none; } section { padding: 3rem 1.5rem; } .contact-box { padding: 2rem 1.5rem; } .hero h1 { font-size: clamp(2.8rem,7vw,5.5rem); } .hero-buttons { flex-direction: column; } .btn { width: 100%; max-width: 260px; text-align: center; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">RESOLUTEC</div>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#como-funciona">Como funciona</a></li>
+    <li><a href="#pagamento">Pagamento</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-label">// navegação</div>
+  <a href="#servicos" class="drawer-nav">💻 Serviços</a>
+  <a href="#como-funciona" class="drawer-nav">🔄 Como funciona</a>
+  <a href="#pagamento" class="drawer-nav">💳 Pagamento</a>
+  <a href="#contato" class="drawer-nav">📞 Contato</a>
+
+  <button class="tool-header" id="btn-ferramentas" style="margin-top:0.8rem; border-radius:6px; border:1px solid rgba(46,184,199,0.2);">🛠️ Ferramentas úteis <span class="tool-arrow">▼</span></button>
+  <div class="tool-body" id="tool-ferramentas" style="background:transparent; border-radius:0 0 6px 6px;">
+    <div class="tool-body-inner" style="padding:0.5rem 0 0 0; display:flex; flex-direction:column; gap:0.4rem;">
+
+      <div class="tool-item">
+        <button class="tool-header" id="btn-ip">🌐 Meu IP público <span class="tool-arrow">▼</span></button>
+        <div class="tool-body" id="tool-ip">
+          <div class="tool-body-inner">
+            <div class="tool-desc">Descobre seu endereço IP público atual.</div>
+            <button class="tool-btn" id="btn-getip">Verificar IP</button>
+            <div class="tool-result" id="result-ip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-item">
+        <button class="tool-header" id="btn-senha">🔑 Gerador de senha <span class="tool-arrow">▼</span></button>
+        <div class="tool-body" id="tool-senha">
+          <div class="tool-body-inner">
+            <div class="tool-desc">Gera uma senha forte e aleatória.</div>
+            <input type="number" class="tool-input" id="senha-tamanho" value="16" min="8" max="64">
+            <button class="tool-btn" id="btn-gerar">Gerar senha</button>
+            <div class="tool-result" id="result-senha"></div>
+            <div class="strength-bar" id="strength-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-item">
+        <button class="tool-header" id="btn-ping">📡 Teste de latência <span class="tool-arrow">▼</span></button>
+        <div class="tool-body" id="tool-ping">
+          <div class="tool-body-inner">
+            <div class="tool-desc">Mede sua latência até este servidor.</div>
+            <button class="tool-btn" id="btn-testping">Testar agora</button>
+            <div class="tool-result" id="result-ping"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-item">
+        <button class="tool-header" id="btn-check">✅ Checklist do PC <span class="tool-arrow">▼</span></button>
+        <div class="tool-body" id="tool-check">
+          <div class="tool-body-inner">
+            <div class="tool-desc">Verifique a saúde do seu computador.</div>
+            <div id="checklist"></div>
+            <div class="tool-result" id="result-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-item">
+        <button class="tool-header" id="btn-conv">📦 Conversor de dados <span class="tool-arrow">▼</span></button>
+        <div class="tool-body" id="tool-conv">
+          <div class="tool-body-inner">
+            <div class="tool-desc">Converte entre KB, MB, GB e TB.</div>
+            <input type="number" class="tool-input" id="conv-valor" placeholder="Ex: 1024">
+            <select class="tool-input" id="conv-de">
+              <option value="1">Bytes (B)</option>
+              <option value="1024">Kilobytes (KB)</option>
+              <option value="1048576" selected>Megabytes (MB)</option>
+              <option value="1073741824">Gigabytes (GB)</option>
+              <option value="1099511627776">Terabytes (TB)</option>
+            </select>
+            <div class="tool-result" id="result-conv"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="position:relative; overflow:hidden;">
+  <div class="hero">
+    <div class="hero-badge">⚡ Suporte 100% remoto</div>
+    <h1>Seu computador<br><span>resolvido</span><br>hoje.</h1>
+    <p>Suporte técnico remoto rápido, seguro e sem complicações. Diagnóstico gratuito antes de qualquer cobrança.</p>
+    <div class="hero-buttons">
+      <a href="#servicos" class="btn btn-primary">Ver serviços</a>
+      <a href="#contato" class="btn btn-outline">Falar no WhatsApp</a>
+    </div>
+  </div>
+  <div class="hero-grid"></div>
+</div>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-number">3+</div><div class="stat-label">Anos de experiência</div></div>
+    <div class="stat"><div class="stat-number">100%</div><div class="stat-label">Remoto</div></div>
+    <div class="stat"><div class="stat-number">R$0</div><div class="stat-label">Diagnóstico</div></div>
+    <div class="stat"><div class="stat-number">24h</div><div class="stat-label">Tempo médio de resposta</div></div>
+  </div>
+</div>
+
+<section id="servicos">
+  <div class="section-label">// serviços</div>
+  <h2 class="section-title">O que posso<br>resolver pra você</h2>
+  <p class="section-sub">Clique em qualquer serviço para ver detalhes e formas de pagamento.</p>
+  <div class="services-grid">
+    <div class="service-card" id="sc-formatacao"><div class="service-icon">💻</div><div class="service-name">Formatação Windows</div><div class="service-desc">Formatação completa, instalação do Windows 10 ou 11, drivers e programas essenciais.</div><div class="service-footer"><span class="service-price">R$ 80</span><span class="service-time">1~2h</span></div></div>
+    <div class="service-card" id="sc-limpeza"><div class="service-icon">🧹</div><div class="service-name">Limpeza & Otimização</div><div class="service-desc">Remoção de vírus, malware e programas indesejados. PC mais rápido e seguro.</div><div class="service-footer"><span class="service-price">R$ 60</span><span class="service-time">1~2h</span></div></div>
+    <div class="service-card" id="sc-suporte"><div class="service-icon">🔧</div><div class="service-name">Suporte Técnico Remoto</div><div class="service-desc">Erros, travamentos, configurações gerais e instalação de softwares.</div><div class="service-footer"><span class="service-price">R$ 40</span><span class="service-time">30~60min</span></div></div>
+    <div class="service-card" id="sc-rede"><div class="service-icon">🌐</div><div class="service-name">Configuração de Rede</div><div class="service-desc">Roteador, Wi-Fi, compartilhamento de rede, VPN e conexões.</div><div class="service-footer"><span class="service-price">R$ 70</span><span class="service-time">1~2h</span></div></div>
+    <div class="service-card" id="sc-software"><div class="service-icon">📦</div><div class="service-name">Instalação de Softwares</div><div class="service-desc">Office, antivírus, navegadores e qualquer programa que você precisar.</div><div class="service-footer"><span class="service-price">R$ 50</span><span class="service-time">30~60min</span></div></div>
+    <div class="service-card" id="sc-script"><div class="service-icon">⚙️</div><div class="service-name">Script de Automação</div><div class="service-desc">Scripts personalizados para automatizar tarefas repetitivas no Windows ou Linux.</div><div class="service-footer"><span class="service-price">R$ 100</span><span class="service-time">2~4h</span></div></div>
+    <div class="service-card" id="sc-servidor"><div class="service-icon">🖥️</div><div class="service-name">Configuração de Servidor</div><div class="service-desc">Setup de servidor Linux, instalação de aplicações e configuração de serviços.</div><div class="service-footer"><span class="service-price">R$ 150</span><span class="service-time">2~5h</span></div></div>
+  </div>
+</section>
+
+<section id="como-funciona" style="background: rgba(27,79,138,0.05); max-width:100%; padding: 5rem 2rem;">
+  <div style="max-width:900px; margin:0 auto;">
+    <div class="section-label">// processo</div>
+    <h2 class="section-title">Como funciona</h2>
+    <p class="section-sub">Simples, rápido e sem sair de casa.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">01 —</div><div class="step-title">Você descreve o problema</div><div class="step-desc">Me manda uma mensagem pelo WhatsApp explicando o que está acontecendo.</div></div>
+      <div class="step"><div class="step-num">02 —</div><div class="step-title">Diagnóstico gratuito</div><div class="step-desc">Analiso o problema sem cobrar nada. Só prosseguimos se você aprovar o orçamento.</div></div>
+      <div class="step"><div class="step-num">03 —</div><div class="step-title">Acesso remoto</div><div class="step-desc">Com AnyDesk ou TeamViewer, acesso seu computador e resolvo na hora.</div></div>
+      <div class="step"><div class="step-num">04 —</div><div class="step-title">Problema resolvido</div><div class="step-desc">Só encerro quando estiver tudo funcionando. Pagamento só depois.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="pagamento">
+  <div class="section-label">// pagamento</div>
+  <h2 class="section-title">Formas de pagamento</h2>
+  <p class="section-sub">Pague do jeito que for mais fácil pra você.</p>
+  <div class="payment-cards">
+    <div class="payment-card"><div class="payment-emoji">💸</div><div class="payment-name">PIX</div><div class="payment-desc">Transferência instantânea. Chave disponível após aprovação do orçamento.</div></div>
+    <div class="payment-card"><div class="payment-emoji">💳</div><div class="payment-name">Mercado Pago</div><div class="payment-desc">Link de pagamento seguro. Aceita cartão de crédito, débito e boleto.</div></div>
+    <div class="payment-card"><div class="payment-emoji">💬</div><div class="payment-name">WhatsApp</div><div class="payment-desc">Prefere conversar antes? Me chama no WhatsApp e combinamos tudo.</div></div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="contact-box">
+    <h2>Pronto pra resolver<br>seu problema?</h2>
+    <p>Diagnóstico gratuito. Sem compromisso.<br>Disponível noites e fins de semana.</p>
+    <div class="contact-options">
+      <a href="https://wa.me/5587981477433?text=Ol%C3%A1!%20Preciso%20de%20suporte%20t%C3%A9cnico." class="btn btn-primary" target="_blank">💬 Chamar no WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>RESOLUTEC © 2025 — Suporte Técnico Remoto — Confiança que resolve.</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" id="modal-close">✕</button>
+    <h3 id="modal-title"></h3>
+    <div class="modal-price" id="modal-price"></div>
+    <p id="modal-desc"></p>
+    <div class="pix-info">
+      <div class="pix-label">Chave PIX</div>
+      <div class="pix-key">a5665884-b243-41f8-84c4-39b12c152d48</div>
+    </div>
+    <a id="modal-whatsapp" href="#" target="_blank" class="whatsapp-btn">💬 Contratar pelo WhatsApp</a>
+  </div>
+</div>
+
+<script>
+(function() {
+  var _initChecklist;
+  var WHATSAPP = '5587981477433';
+
+  var services = {
+    formatacao: { title: 'Formatação Windows', price: 'R$ 80', desc: 'Formatação completa, instalação do Windows 10 ou 11, drivers e programas essenciais. Atendimento remoto via AnyDesk ou TeamViewer. Tempo estimado: 1 a 2 horas.', msg: 'Olá! Quero contratar o serviço de Formatação Windows por R$80.' },
+    limpeza:    { title: 'Limpeza & Otimização', price: 'R$ 60', desc: 'Remoção completa de vírus, malware e programas indesejados. Limpeza de registro e otimização da inicialização. Tempo estimado: 1 a 2 horas.', msg: 'Olá! Quero contratar Limpeza e Otimização por R$60.' },
+    suporte:    { title: 'Suporte Técnico Remoto', price: 'R$ 40', desc: 'Resolução de problemas gerais: travamentos, erros, configurações e instalação de softwares. Diagnóstico gratuito. Tempo estimado: 30 a 60 minutos.', msg: 'Olá! Quero contratar Suporte Técnico Remoto por R$40.' },
+    rede:       { title: 'Configuração de Rede', price: 'R$ 70', desc: 'Configuração de roteador, Wi-Fi, compartilhamento de rede, VPN e conexões. Tempo estimado: 1 a 2 horas.', msg: 'Olá! Quero contratar Configuração de Rede por R$70.' },
+    software:   { title: 'Instalação de Softwares', price: 'R$ 50', desc: 'Instalação e configuração de qualquer programa: Office, antivírus, navegadores e mais. Tempo estimado: 30 a 60 minutos.', msg: 'Olá! Quero contratar Instalação de Softwares por R$50.' },
+    script:     { title: 'Script de Automação', price: 'R$ 100', desc: 'Scripts personalizados para automatizar tarefas no Windows ou Linux. Prazo estimado: 2 a 4 horas dependendo da complexidade.', msg: 'Olá! Quero contratar um Script de Automação por R$100.' },
+    servidor:   { title: 'Configuração de Servidor', price: 'R$ 150', desc: 'Setup de servidor Linux, instalação de aplicações e configuração de serviços. Prazo estimado: 2 a 5 horas.', msg: 'Olá! Quero contratar Configuração de Servidor por R$150.' }
+  };
+
+  function openModal(key) {
+    var s = services[key];
+    document.getElementById('modal-title').textContent = s.title;
+    document.getElementById('modal-price').textContent = s.price;
+    document.getElementById('modal-desc').textContent = s.desc;
+    document.getElementById('modal-whatsapp').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(s.msg);
+    document.getElementById('modal-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawer-overlay').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+
+  function toggleTool(bodyId, btnId) {
+    document.getElementById(bodyId).classList.toggle('open');
+    document.getElementById(btnId).classList.toggle('open');
+    if (bodyId === 'tool-check' && !document.getElementById('checklist').children.length) _initChecklist();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Drawer
+    document.getElementById('hamburger').addEventListener('click', toggleDrawer);
+    document.getElementById('drawer-overlay').addEventListener('click', toggleDrawer);
+    document.querySelectorAll('.drawer-nav').forEach(function(a) { a.addEventListener('click', toggleDrawer); });
+
+    // Modal service cards
+    var cardMap = { 'sc-formatacao':'formatacao','sc-limpeza':'limpeza','sc-suporte':'suporte','sc-rede':'rede','sc-software':'software','sc-script':'script','sc-servidor':'servidor' };
+    Object.keys(cardMap).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function() { openModal(cardMap[id]); });
+    });
+
+    // Modal close
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    // Tool accordion
+    document.getElementById('btn-ferramentas').addEventListener('click', function() { toggleTool('tool-ferramentas','btn-ferramentas'); });
+    document.getElementById('btn-ip').addEventListener('click', function() { toggleTool('tool-ip','btn-ip'); });
+    document.getElementById('btn-senha').addEventListener('click', function() { toggleTool('tool-senha','btn-senha'); });
+    document.getElementById('btn-ping').addEventListener('click', function() { toggleTool('tool-ping','btn-ping'); });
+    document.getElementById('btn-check').addEventListener('click', function() { toggleTool('tool-check','btn-check'); });
+    document.getElementById('btn-conv').addEventListener('click', function() { toggleTool('tool-conv','btn-conv'); });
+
+    // IP
+    document.getElementById('btn-getip').addEventListener('click', function() {
+      var el = document.getElementById('result-ip');
+      el.textContent = 'Buscando...';
+      fetch('https://api64.ipify.org?format=json')
+        .then(function(r) { return r.json(); })
+        .then(function(d) { el.textContent = d.ip; })
+        .catch(function() {
+          fetch('https://ipapi.co/json/')
+            .then(function(r) { return r.json(); })
+            .then(function(d) { el.textContent = d.ip; })
+            .catch(function() { el.textContent = 'Erro ao buscar IP.'; });
+        });
+    });
+
+    // Senha
+    document.getElementById('btn-gerar').addEventListener('click', function() {
+      var len = parseInt(document.getElementById('senha-tamanho').value) || 16;
+      var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=';
+      var senha = Array.from({length:len}, function() { return chars[Math.floor(Math.random()*chars.length)]; }).join('');
+      var el = document.getElementById('result-senha');
+      el.textContent = senha;
+      var score = (len>=16?40:len>=12?25:10)+(/[A-Z]/.test(senha)?15:0)+(/[0-9]/.test(senha)?15:0)+(/[^a-zA-Z0-9]/.test(senha)?30:0);
+      var bar = document.getElementById('strength-bar');
+      bar.style.width = Math.min(score,100)+'%';
+      bar.style.background = score>=80?'#1db87a':score>=50?'#f0a500':'#e74c3c';
+    });
+
+    // Ping
+    document.getElementById('btn-testping').addEventListener('click', async function() {
+      var el = document.getElementById('result-ping');
+      el.textContent = 'Medindo...';
+      var tempos = [];
+      for (var i=0;i<5;i++) {
+        var t0 = performance.now();
+        try { await fetch(location.href+'?t='+i, {cache:'no-store',mode:'no-cors'}); } catch(e) {}
+        tempos.push(Math.round(performance.now()-t0));
+        await new Promise(function(r){setTimeout(r,100);});
+      }
+      var avg = Math.round(tempos.reduce(function(a,b){return a+b;})/tempos.length);
+      el.textContent = 'Média: '+avg+'ms — '+(avg<50?'🟢 Excelente':avg<100?'🟡 Boa':avg<200?'🟠 Regular':'🔴 Ruim');
+    });
+
+    // Checklist
+    _initChecklist = function() {
+      var items = ['Reiniciou o PC hoje?','Windows Update em dia?','Antivírus ativo e atualizado?','Disco com +10% de espaço livre?','Sem programas inúteis na inicialização?','Temperatura do processador normal (<80°C)?','Wi-Fi ou cabo com sinal forte?','Drivers de vídeo atualizados?'];
+      var el = document.getElementById('checklist');
+      items.forEach(function(item) {
+        var label = document.createElement('label');
+        label.style.cssText = 'display:flex;gap:0.5rem;align-items:center;font-size:0.78rem;color:var(--gray);cursor:pointer;margin-bottom:0.4rem';
+        var chk = document.createElement('input');
+        chk.type = 'checkbox'; chk.style.accentColor = 'var(--cyan)';
+        chk.addEventListener('change', function() {
+          var all = document.querySelectorAll('#checklist input');
+          var checked = document.querySelectorAll('#checklist input:checked').length;
+          var pct = Math.round(checked/all.length*100);
+          document.getElementById('result-check').textContent = checked+'/'+all.length+' OK ('+pct+'%) '+(pct===100?'🟢 Tudo certo!':pct>=60?'🟡 Quase lá':'🔴 Precisa de atenção');
+        });
+        label.appendChild(chk);
+        label.appendChild(document.createTextNode(item));
+        el.appendChild(label);
+      });
+    }
+
+    // Conversor
+    function converter() {
+      var val = parseFloat(document.getElementById('conv-valor').value);
+      var fator = parseFloat(document.getElementById('conv-de').value);
+      var el = document.getElementById('result-conv');
+      if (isNaN(val)) { el.innerHTML = ''; return; }
+      var bytes = val * fator;
+      el.innerHTML = bytes.toLocaleString('pt-BR')+' B<br>'+(bytes/1024).toFixed(2)+' KB<br>'+(bytes/1048576).toFixed(4)+' MB<br>'+(bytes/1073741824).toFixed(6)+' GB<br>'+(bytes/1099511627776).toFixed(8)+' TB';
+    }
+    document.getElementById('conv-valor').addEventListener('input', converter);
+    document.getElementById('conv-de').addEventListener('change', converter);
+
+    // ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.getElementById('drawer').classList.remove('open');
+        document.getElementById('drawer-overlay').classList.remove('open');
+        document.getElementById('hamburger').classList.remove('open');
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
     }
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background: rgba(13,27,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,184,199,0.15); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1rem; background: rgba(13,27,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,184,199,0.15); }
     .nav-logo { font-family: monospace; font-weight: 700; font-size: 1.1rem; color: var(--cyan); letter-spacing: 2px; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
@@ -57,7 +57,7 @@
     .copy-btn { background: none; border: 1px solid rgba(46,184,199,0.3); color: var(--cyan); padding: 0.2rem 0.5rem; border-radius: 3px; font-family: monospace; font-size: 0.65rem; cursor: pointer; margin-left: 0.4rem; }
     .strength-bar { height: 6px; border-radius: 3px; margin-top: 0.5rem; transition: width 0.3s, background 0.3s; width: 0; }
     /* HERO */
-    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; position: relative; overflow: hidden; width: 100%; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 8rem 1rem 4rem; max-width: 1200px; margin: 0 auto; position: relative; overflow: hidden; width: 100%; }
     .hero-badge { font-family: monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s; }
     .hero h1 { font-size: clamp(2.5rem,9vw,6.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s; }
     .hero h1 span { color: var(--cyan); }
@@ -73,12 +73,12 @@
     .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
     /* STATS */
     .stats { background: rgba(27,79,138,0.15); border-top: 1px solid rgba(46,184,199,0.1); border-bottom: 1px solid rgba(46,184,199,0.1); padding: 2rem; }
-    .stats-inner { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap; }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap; }
     .stat { text-align: center; }
     .stat-number { font-family: monospace; font-size: 2.2rem; font-weight: 700; color: var(--cyan); }
     .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
     /* SECTION */
-    section { max-width: 900px; margin: 0 auto; padding: 5rem 2rem; }
+    section { max-width: 1200px; margin: 0 auto; padding: 5rem 1rem; }
     .section-label { font-family: monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
     .section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.1; }
     .section-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
@@ -261,8 +261,8 @@
   </div>
 </section>
 
-<section id="como-funciona" style="background: rgba(27,79,138,0.05); max-width:100%; padding: 5rem 2rem;">
-  <div style="max-width:900px; margin:0 auto;">
+<section id="como-funciona" style="background: rgba(27,79,138,0.05); max-width:100%; padding: 5rem 1rem;">
+  <div style="max-width:1200px; margin:0 auto;">
     <div class="section-label">// processo</div>
     <h2 class="section-title">Como funciona</h2>
     <p class="section-sub">Simples, rápido e sem sair de casa.</p>

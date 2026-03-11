@@ -8,30 +8,30 @@
 
   <style>
     @font-face {
-      font-family: 'Space Mono';
+      font-family: 'space mono';
       src: url('fonts/space-mono-latin-400-normal.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Space Mono';
+      font-family: 'space mono';
       src: url('fonts/space-mono-latin-700-normal.woff2') format('woff2');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Syne';
+      font-family: 'syne';
       src: url('fonts/syne-latin-400-normal.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Syne';
+      font-family: 'syne';
       src: url('fonts/syne-latin-800-normal.woff2') format('woff2');
-      font-weight: 800;
+      font-weight: 600 800;
       font-style: normal;
       font-display: swap;
     }
@@ -44,14 +44,14 @@
       --white: #ffffff; --gray: #8a9bb0; --green: #1db87a;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Syne', sans-serif; background: var(--navy); color: var(--white); overflow-x: hidden; }
+    body { font-family: 'syne', sans-serif; background: var(--navy); color: var(--white); overflow-x: hidden; }
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
     }
     /* NAV */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background: rgba(13,27,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,184,199,0.15); }
-    .nav-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1.1rem; color: var(--cyan); letter-spacing: 2px; }
+    .nav-logo { font-family: 'space mono', monospace; font-weight: 700; font-size: 1.1rem; color: var(--cyan); letter-spacing: 2px; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
     .nav-links a:hover { color: var(--cyan); }
@@ -66,7 +66,7 @@
     .drawer.open { right: 0; }
     .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; }
     .drawer-overlay.open { display: block; }
-    .drawer-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; padding: 1rem 0 0.5rem; border-top: 1px solid rgba(46,184,199,0.1); margin-top: 0.5rem; }
+    .drawer-label { font-family: 'space mono', monospace; font-size: 0.65rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; padding: 1rem 0 0.5rem; border-top: 1px solid rgba(46,184,199,0.1); margin-top: 0.5rem; }
     .drawer-label:first-child { border-top: none; margin-top: 0; }
     .drawer a { color: var(--gray); text-decoration: none; font-size: 0.95rem; font-weight: 600; padding: 0.6rem 0; transition: color 0.2s; display: block; }
     .drawer a:hover { color: var(--white); }
@@ -80,16 +80,16 @@
     .tool-body.open { max-height: 2000px; }
     .tool-body-inner { padding: 1rem; }
     .tool-desc { font-size: 0.78rem; color: var(--gray); line-height: 1.5; margin-bottom: 0.8rem; }
-    .tool-result { font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--cyan); margin-top: 0.8rem; word-break: break-all; min-height: 1rem; }
-    .tool-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(46,184,199,0.2); border-radius: 4px; padding: 0.5rem 0.8rem; color: var(--white); font-family: 'Space Mono', monospace; font-size: 0.78rem; outline: none; margin-bottom: 0.5rem; }
+    .tool-result { font-family: 'space mono', monospace; font-size: 0.78rem; color: var(--cyan); margin-top: 0.8rem; word-break: break-all; min-height: 1rem; }
+    .tool-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(46,184,199,0.2); border-radius: 4px; padding: 0.5rem 0.8rem; color: var(--white); font-family: 'space mono', monospace; font-size: 0.78rem; outline: none; margin-bottom: 0.5rem; }
     .tool-input:focus { border-color: var(--cyan); }
-    .tool-btn { background: var(--cyan); color: var(--navy); border: none; padding: 0.4rem 1rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .tool-btn { background: var(--cyan); color: var(--navy); border: none; padding: 0.4rem 1rem; border-radius: 4px; font-family: 'space mono', monospace; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
     .tool-btn:hover { background: #25d4e5; }
-    .copy-btn { background: none; border: 1px solid rgba(46,184,199,0.3); color: var(--cyan); padding: 0.2rem 0.5rem; border-radius: 3px; font-family: 'Space Mono', monospace; font-size: 0.65rem; cursor: pointer; margin-left: 0.4rem; }
+    .copy-btn { background: none; border: 1px solid rgba(46,184,199,0.3); color: var(--cyan); padding: 0.2rem 0.5rem; border-radius: 3px; font-family: 'space mono', monospace; font-size: 0.65rem; cursor: pointer; margin-left: 0.4rem; }
     .strength-bar { height: 6px; border-radius: 3px; margin-top: 0.5rem; transition: width 0.3s, background 0.3s; width: 0; }
     /* HERO */
     .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; position: relative; overflow: hidden; width: 100%; }
-    .hero-badge { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s; }
+    .hero-badge { font-family: 'space mono', monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s; }
     .hero h1 { font-size: clamp(2rem,8vw,5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s; }
     .hero h1 span { color: var(--cyan); }
     .hero p { font-size: 1.15rem; color: var(--gray); line-height: 1.7; max-width: 560px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s; }
@@ -97,7 +97,7 @@
     .hero-grid { position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 400px; height: 400px; opacity: 0.06; background-image: linear-gradient(var(--cyan) 1px, transparent 1px), linear-gradient(90deg, var(--cyan) 1px, transparent 1px); background-size: 40px 40px; border-radius: 50%; animation: pulse 4s ease-in-out infinite; }
     @keyframes pulse { 0%,100% { opacity:0.06; transform:translateY(-50%) scale(1); } 50% { opacity:0.1; transform:translateY(-50%) scale(1.05); } }
     /* BUTTONS */
-    .btn { padding: 0.85rem 2rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; display: inline-block; width: auto; }
+    .btn { padding: 0.85rem 2rem; border-radius: 4px; font-family: 'space mono', monospace; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; display: inline-block; width: auto; }
     .btn-primary { background: var(--cyan); color: var(--navy); }
     .btn-primary:hover { background: #25d4e5; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,184,199,0.3); }
     .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
@@ -106,11 +106,11 @@
     .stats { background: rgba(27,79,138,0.15); border-top: 1px solid rgba(46,184,199,0.1); border-bottom: 1px solid rgba(46,184,199,0.1); padding: 2rem; }
     .stats-inner { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap; }
     .stat { text-align: center; }
-    .stat-number { font-family: 'Space Mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--cyan); }
+    .stat-number { font-family: 'space mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--cyan); }
     .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
     /* SECTION */
     section { max-width: 900px; margin: 0 auto; padding: 5rem 2rem; }
-    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+    .section-label { font-family: 'space mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
     .section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.1; }
     .section-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
     /* SERVICES */
@@ -121,12 +121,12 @@
     .service-name { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
     .service-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; margin-bottom: 1.2rem; }
     .service-footer { display: flex; justify-content: space-between; align-items: center; }
-    .service-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--green); }
-    .service-time { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gray); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px; }
+    .service-price { font-family: 'space mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+    .service-time { font-family: 'space mono', monospace; font-size: 0.7rem; color: var(--gray); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px; }
     /* STEPS */
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 2rem; }
     .step { padding-left: 1rem; border-left: 2px solid rgba(46,184,199,0.3); }
-    .step-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.8rem; }
+    .step-num { font-family: 'space mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.8rem; }
     .step-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
     .step-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
     /* PAYMENT */
@@ -146,16 +146,16 @@
     .modal-overlay.active { display: flex; }
     .modal { background: var(--navy); border: 1px solid rgba(46,184,199,0.3); border-radius: 12px; padding: 2.5rem; max-width: 480px; width: 100%; position: relative; }
     .modal h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .modal-price { font-family: 'Space Mono', monospace; color: var(--green); font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .modal-price { font-family: 'space mono', monospace; color: var(--green); font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
     .modal p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
     .modal-close:hover { color: var(--white); }
     .pix-info { background: rgba(46,184,199,0.08); border: 1px solid rgba(46,184,199,0.2); border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; }
-    .pix-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.4rem; }
-    .pix-key { font-family: 'Space Mono', monospace; font-size: 0.9rem; color: var(--white); word-break: break-all; }
-    .whatsapp-btn { display: block; background: #25D366; color: white; text-align: center; padding: 0.85rem; border-radius: 4px; text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; transition: background 0.2s, transform 0.2s; }
+    .pix-label { font-family: 'space mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 0.4rem; }
+    .pix-key { font-family: 'space mono', monospace; font-size: 0.9rem; color: var(--white); word-break: break-all; }
+    .whatsapp-btn { display: block; background: #25D366; color: white; text-align: center; padding: 0.85rem; border-radius: 4px; text-decoration: none; font-family: 'space mono', monospace; font-size: 0.85rem; font-weight: 700; transition: background 0.2s, transform 0.2s; }
     .whatsapp-btn:hover { background: #20ba58; transform: translateY(-2px); }
-    footer { border-top: 1px solid rgba(46,184,199,0.1); padding: 2rem; text-align: center; color: var(--gray); font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; }
+    footer { border-top: 1px solid rgba(46,184,199,0.1); padding: 2rem; text-align: center; color: var(--gray); font-family: 'space mono', monospace; font-size: 0.75rem; letter-spacing: 1px; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     @media (max-width: 600px) { nav { padding: 1rem; } .nav-links { display: none; } .hero { padding: 5rem 1.5rem 3rem; min-height: auto; } .hero-grid { display: none; } section { padding: 3rem 1.5rem; } .contact-box { padding: 2rem 1.5rem; } .hero h1 { font-size: clamp(2.8rem,7vw,5.5rem); } .hero-buttons { flex-direction: column; } .btn { width: 100%; max-width: 260px; text-align: center; } }
   </style>
